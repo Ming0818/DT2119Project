@@ -10,3 +10,5 @@ TIMIT + Tensorflow guide - https://igormq.github.io/2016/07/19/ctc-tensorflow-ti
 
 
 RNN on timit, good data extraction - https://github.com/joergfranke/phoneme_recognition
+
+Extraction data and mfcc - https://github.com/Jy-Liu/timit-preprocessor
