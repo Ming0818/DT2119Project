@@ -7,3 +7,6 @@ Long-term Recurrent Convolutional Networks for Visual Recognition and Descriptio
 Deep Learning - https://www.nature.com/articles/nature14539.pdf
 
 TIMIT + Tensorflow guide - https://igormq.github.io/2016/07/19/ctc-tensorflow-timit/
+
+
+RNN on timit, good data extraction - https://github.com/joergfranke/phoneme_recognition
