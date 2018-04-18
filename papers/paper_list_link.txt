@@ -1,0 +1,7 @@
+Deep Recurrent Convolutional Neural Network: Improving Performance For Speech Recognition - https://arxiv.org/pdf/1611.07174.pdf
+
+CONVOLUTIONAL, LONG SHORT-TERM MEMORY, FULLY CONNECTED DEEP NEURAL NETWORKS - https://static.googleusercontent.com/media/research.google.com/fr//pubs/archive/43455.pdf
+
+Long-term Recurrent Convolutional Networks for Visual Recognition and Description - http://openaccess.thecvf.com/content_cvpr_2015/papers/Donahue_Long-Term_Recurrent_Convolutional_2015_CVPR_paper.pdf
+
+Deep Learning - https://www.nature.com/articles/nature14539.pdf
