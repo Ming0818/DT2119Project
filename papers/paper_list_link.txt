@@ -5,3 +5,5 @@ CONVOLUTIONAL, LONG SHORT-TERM MEMORY, FULLY CONNECTED DEEP NEURAL NETWORKS - ht
 Long-term Recurrent Convolutional Networks for Visual Recognition and Description - http://openaccess.thecvf.com/content_cvpr_2015/papers/Donahue_Long-Term_Recurrent_Convolutional_2015_CVPR_paper.pdf
 
 Deep Learning - https://www.nature.com/articles/nature14539.pdf
+
+TIMIT + Tensorflow guide - https://igormq.github.io/2016/07/19/ctc-tensorflow-timit/
