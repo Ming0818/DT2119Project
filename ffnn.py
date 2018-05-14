@@ -17,7 +17,7 @@ class FFNN(Network):
             model.add(Dense(self.hidden_nodes[i], activation='relu'))
         model.add(Dense(self.y_train.shape[1], activation='softmax'))
 
-        model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         history_callback = model.fit(self.x_train, self.y_train,
                                      validation_data=(self.x_val, self.y_val),
