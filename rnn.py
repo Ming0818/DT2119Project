@@ -1,20 +1,19 @@
 from network import Network
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras import Sequential
-from keras.layers import BatchNormalization, Dense, Dropout
+from keras.layers import LSTM, Dense
 
 
-class FFNN(Network):
+class RNN(Network):
     def train_model(self):
         es = EarlyStopping(patience=4)
         lr_reduce = ReduceLROnPlateau(factor=0.2)
-        model = Sequential()
 
-        model.add(Dense(self.hidden_nodes[0], input_dim=self.x_train.shape[1], activation='relu'))
-        for i in range(1, self.n_layers):
-            model.add(BatchNormalization())
-            model.add(Dropout(0.3))
-            model.add(Dense(self.hidden_nodes[i], activation='relu'))
+        model = Sequential()
+        model.add(LSTM(128, input_shape=(self.x_train.shape[1:]), return_sequences=True))
+        model.add(LSTM(128, return_sequences=True))
+        model.add(LSTM(64))
+
         model.add(Dense(self.y_train.shape[1], activation='softmax'))
 
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])

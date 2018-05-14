@@ -38,9 +38,10 @@ class Network:
         self.x_test = self.scaler.transform(self.x_test)
         self.x_val = self.scaler.transform(self.x_val)
         if self.as_mat:
-            self.x_train = self.x_train.reshape((self.x_train.shape[0], 7, 13))
-            self.x_val = self.x_test.reshape((self.x_test.shape[0], 7, 13))
-            self.x_val = self.x_val.reshape((self.x_val.shape[0], 7, 13))
+            """ 13 is number of MFCC features. Don't love the magic number."""
+            self.x_train = self.x_train.reshape((self.x_train.shape[0], self.context_length, 13))
+            self.x_test = self.x_test.reshape((self.x_test.shape[0], self.context_length, 13))
+            self.x_val = self.x_val.reshape((self.x_val.shape[0], self.context_length, 13))
 
     @staticmethod
     def import_phonemes():
