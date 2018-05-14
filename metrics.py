@@ -72,7 +72,7 @@ def get_classification_report(y_true, yp, labels):
 
 
 def get_f1_score(y_true, yp):
-    return f1_score(y_true, yp)
+    return f1_score(y_true, yp, average='weighted')
 
 
 def get_confusion_matrix(y_true, yp):
