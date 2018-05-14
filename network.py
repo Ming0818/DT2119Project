@@ -22,24 +22,24 @@ class Network:
         self.as_mat = params['as_mat']
         self.phones = self.import_phonemes()
 
-        self.train, self.test = self.__load_data()
+        self.train, self.test, self.val = self.__load_data()
         if params['speaker_norm']:
             self.train = self.speaker_normalisation(self.train)
             self.test = self.speaker_normalisation(self.test)
-            # self.val = self.speaker_normalisation(self.val)
+            self.val = self.speaker_normalisation(self.val)
         self.use_dynamic_features = params['use_dynamic_features']
         self.feature_func = self.__dynamic_features if self.use_dynamic_features else self.__regular_features
         self.x_train, self.y_train = self.feature_func(self.train)
         self.x_test, self.y_test = self.feature_func(self.test)
-        # self.x_val, self.y_val = self.feature_func(self.val)
+        self.x_val, self.y_val = self.feature_func(self.val)
         self.scaler = StandardScaler()
         self.x_train = self.scaler.fit_transform(self.x_train)
         self.x_test = self.scaler.transform(self.x_test)
-        # self.x_val = self.scaler.transform(self.x_val)
+        self.x_val = self.scaler.transform(self.x_val)
         if self.as_mat:
             self.x_train = self.x_train.reshape((self.x_train.shape[0], 7, 13))
             self.x_val = self.x_test.reshape((self.x_test.shape[0], 7, 13))
-            # self.x_val = self.x_val.reshape((self.x_val.shape[0], 7, 13))
+            self.x_val = self.x_val.reshape((self.x_val.shape[0], 7, 13))
 
     @staticmethod
     def import_phonemes():
@@ -47,7 +47,9 @@ class Network:
 
     @staticmethod
     def __load_data() -> List[Dict]:
-        return [np.load('dataset/traindata.npz')['data'], np.load('dataset/testdata.npz')['data']]
+        return [np.load('dataset/traindata_.npz')['data'],
+                np.load('dataset/testdata_.npz')['data'],
+                np.load('dataset/valdata_.npz')['data']]
 
     def __regular_features(self, data):
         x = np.concatenate([x[self.feature_name] for x in data])

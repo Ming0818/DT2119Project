@@ -20,6 +20,7 @@ class FFNN(Network):
         model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 
         history_callback = model.fit(self.x_train, self.y_train,
+                                     validation_data=(self.x_val, self.y_val),
                                      epochs=self.epochs,
                                      batch_size=2048, callbacks=[es, lr_reduce])
         self.train_loss_history = history_callback.history["loss"]
