@@ -23,8 +23,9 @@ from pysndfile import sndio
 # }
 
 class2pho = {
-	'aa': {'idx': 0, 'pho': ['aa']}
+    'aa': {'idx': 0, 'pho': ['aa']}
 }
+
 
 def loadAudio(filename):
     """
@@ -41,8 +42,9 @@ def loadAudio(filename):
     """
     sndobj = sndio.read(filename)
     samplingrate = sndobj[1]
-    samples = np.array(sndobj[0])*np.iinfo(np.int16).max
+    samples = np.array(sndobj[0]) * np.iinfo(np.int16).max
     return samples, samplingrate
+
 
 def mfcc(samples, winlen=400, winshift=200, preempcoeff=0.97, nfft=512,
          nceps=13, samplingrate=16000, liftercoeff=22, return_mspec=False):
@@ -71,6 +73,7 @@ def mfcc(samples, winlen=400, winshift=200, preempcoeff=0.97, nfft=512,
         return lifter(ceps, liftercoeff), mspec
     return lifter(ceps, liftercoeff)
 
+
 # Functions to be implemented ----------------------------------
 
 
@@ -89,7 +92,7 @@ def enframe(samples, winlen, winshift):
     i = 0
 
     while (i + winlen) < len(samples):
-        to_return.append(np.array(samples[i:i+winlen]))
+        to_return.append(np.array(samples[i:i + winlen]))
         i += winshift
     return np.array(to_return)
 
@@ -158,7 +161,6 @@ def logMelSpectrum(input, samplingrate):
           nmelfilters
     """
 
-
     fbank = trfbank(samplingrate, input.shape[1])
     return np.log(input @ fbank.T)
 
@@ -190,10 +192,11 @@ def lifter(mfcc, lifter=22):
        NxM array with lifeterd coefficients
     """
     nframes, nceps = mfcc.shape
-    cepwin = 1.0 + lifter/2.0 * np.sin(np.pi * np.arange(nceps) / lifter)
+    cepwin = 1.0 + lifter / 2.0 * np.sin(np.pi * np.arange(nceps) / lifter)
     return np.multiply(mfcc, np.tile(cepwin, nframes).reshape((nframes, nceps)))
 
-def trfbank(fs, nfft, lowfreq=133.33, linsc=200/3., logsc=1.0711703, nlinfilt=13, nlogfilt=27, equalareas=False):
+
+def trfbank(fs, nfft, lowfreq=133.33, linsc=200 / 3., logsc=1.0711703, nlinfilt=13, nlogfilt=27, equalareas=False):
     """Compute triangular filterbank for MFCC computation.
 
     Inputs:
@@ -217,13 +220,13 @@ def trfbank(fs, nfft, lowfreq=133.33, linsc=200/3., logsc=1.0711703, nlinfilt=13
     # ------------------------
     # Compute start/middle/end points of the triangular filters in spectral
     # domain
-    freqs = np.zeros(nfilt+2)
+    freqs = np.zeros(nfilt + 2)
     freqs[:nlinfilt] = lowfreq + np.arange(nlinfilt) * linsc
-    freqs[nlinfilt:] = freqs[nlinfilt-1] * logsc ** np.arange(1, nlogfilt + 3)
+    freqs[nlinfilt:] = freqs[nlinfilt - 1] * logsc ** np.arange(1, nlogfilt + 3)
     if equalareas:
         heights = np.ones(nfilt)
     else:
-        heights = 2./(freqs[2:] - freqs[0:-2])
+        heights = 2. / (freqs[2:] - freqs[0:-2])
 
     # Compute filterbank coeff (in fft domain, in bins)
     fbank = np.zeros((nfilt, nfft))
@@ -231,8 +234,8 @@ def trfbank(fs, nfft, lowfreq=133.33, linsc=200/3., logsc=1.0711703, nlinfilt=13
     nfreqs = np.arange(nfft) / (1. * nfft) * fs
     for i in range(nfilt):
         low = freqs[i]
-        cen = freqs[i+1]
-        hi = freqs[i+2]
+        cen = freqs[i + 1]
+        hi = freqs[i + 2]
 
         lid = np.arange(np.floor(low * nfft / fs) + 1,
                         np.floor(cen * nfft / fs) + 1, dtype=np.int)
@@ -244,6 +247,7 @@ def trfbank(fs, nfft, lowfreq=133.33, linsc=200/3., logsc=1.0711703, nlinfilt=13
         fbank[i][rid] = rslope * (hi - nfreqs[rid])
 
     return fbank
+
 
 def Get_phonemes(filename):
     """
@@ -272,12 +276,12 @@ def Get_phonemes(filename):
                     phoneme = phm
                 else:
                     idx = max(class2pho.values(), key=lambda x: x['idx'])['idx']
-                    #idx = max(class2pho.iteritems(), key=operator.itemgetter(1))[1]
-                    class2pho[phoneme] = {'idx': idx+1, 'pho': [phoneme]}
+                    # idx = max(class2pho.iteritems(), key=operator.itemgetter(1))[1]
+                    class2pho[phoneme] = {'idx': idx + 1, 'pho': [phoneme]}
 
             phd = {'start': int(parts[0]),
-                  'end': int(parts[1]),
-                  'phoneme': phoneme}
+                   'end': int(parts[1]),
+                   'phoneme': phoneme}
 
             phonemes.append(phd)
 
@@ -285,55 +289,58 @@ def Get_phonemes(filename):
 
 
 def Get_words(filename):
-	"""
-	Get the words info from TIMIT
-	:param sfile: word file
-	:return: word info
-	"""
-	words = []
-	with open(filename) as f:	
-		for line in f:
-			parts = line.rstrip().split(' ')
-			ph = {'start': int(parts[0]),
+    """
+    Get the words info from TIMIT
+    :param sfile: word file
+    :return: word info
+    """
+    words = []
+    with open(filename) as f:
+        for line in f:
+            parts = line.rstrip().split(' ')
+            ph = {'start': int(parts[0]),
                   'end': int(parts[1]),
                   'sentence': parts[2:]}
 
-			words.append(ph)
+            words.append(ph)
 
-	return words
+    return words
+
 
 def Make_target(sample, phonemes, winlen=400, winshift=200):
-	#assigne a phoneme to each window frame base on the number of samples in common
-	start_win = 0
-	index_phoneme = 0
-	max_phoneme = len(phonemes)
-	target = []
-	count = 0
-	while (start_win + winlen) < len(sample):
-		while phonemes[index_phoneme]['end'] <= start_win :
-			index_phoneme += 1
-			if index_phoneme%max_phoneme == 0:
-				index_phoneme -= 1
-				break
-		max_phon = 0 
-		if (index_phoneme + max_phon + 1) < max_phoneme:
-			while phonemes[index_phoneme + max_phon + 1]['start'] <= start_win + winlen:
-				max_phon +=1
-				if (index_phoneme + max_phon + 1)%max_phoneme == 0 :
-					break
-		selected_phon = index_phoneme
-		match_phon = min(0, start_win - phonemes[index_phoneme]['start']) + min(0, phonemes[index_phoneme]['end'] - start_win + winlen)
-		for possible_phon_index in range(max_phon):
-			curr_match_phon = min(0, start_win - phonemes[possible_phon_index]['start']) + min(0, phonemes[possible_phon_index]['end'] - start_win + winlen)
-			if curr_match_phon > match_phon:
-				selected_phon = possible_phon_index
-				match_phon = curr_match_phon
+    # assigne a phoneme to each window frame base on the number of samples in common
+    start_win = 0
+    index_phoneme = 0
+    max_phoneme = len(phonemes)
+    target = []
+    count = 0
+    while (start_win + winlen) < len(sample):
+        while phonemes[index_phoneme]['end'] <= start_win:
+            index_phoneme += 1
+            if index_phoneme % max_phoneme == 0:
+                index_phoneme -= 1
+                break
+        max_phon = 0
+        if (index_phoneme + max_phon + 1) < max_phoneme:
+            while phonemes[index_phoneme + max_phon + 1]['start'] <= start_win + winlen:
+                max_phon += 1
+                if (index_phoneme + max_phon + 1) % max_phoneme == 0:
+                    break
+        selected_phon = index_phoneme
+        match_phon = min(0, start_win - phonemes[index_phoneme]['start']) + min(0, phonemes[index_phoneme][
+            'end'] - start_win + winlen)
+        for possible_phon_index in range(max_phon):
+            curr_match_phon = min(0, start_win - phonemes[possible_phon_index]['start']) + min(0, phonemes[
+                possible_phon_index]['end'] - start_win + winlen)
+            if curr_match_phon > match_phon:
+                selected_phon = possible_phon_index
+                match_phon = curr_match_phon
 
-		target.append(phonemes[selected_phon]['phoneme'])
-		start_win += winshift
-		count += 1
+        target.append(phonemes[selected_phon]['phoneme'])
+        start_win += winshift
+        count += 1
 
-	return target
+    return target
 
 # def Make_target(sample, phonemes, winlen=400):
 # 	#assigne a phoneme to each window frame base on the number of samples in common
@@ -344,4 +351,3 @@ def Make_target(sample, phonemes, winlen=400, winshift=200):
 # 	win_timestep = np.array([i*winlen for i in range(len(sample)//winlen+1)])
 
 # 	np.argmax(np.min(0, phone_timestep[1:] - win_timestep[:-1]))
-
