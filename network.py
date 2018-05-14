@@ -15,7 +15,7 @@ class Network:
         self.model = None
         self.train_loss_history = []
         self.train_acc_history = []
-        self.context_lengt = params['context_length']
+        self.context_length = params['context_length']
         self.n_layers = params['n_layers']
         self.hidden_nodes = params['hidden_nodes']
         self.epochs = params['epochs']
