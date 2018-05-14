@@ -15,6 +15,7 @@ class Network:
         self.model = None
         self.train_loss_history = []
         self.train_acc_history = []
+        self.context_lengt = params['context_length']
         self.n_layers = params['n_layers']
         self.hidden_nodes = params['hidden_nodes']
         self.epochs = params['epochs']
@@ -59,17 +60,16 @@ class Network:
     def __dynamic_features(self, data):
         X = []
         Y = []
+        half = self.context_length // 2
         for d in data:
             m = d[self.feature_name]
+            N = len(m)
             for i, _ in enumerate(m):
                 if i < 3:
-                    res = np.array([m[abs(i - 3)], m[abs(i - 2)], m[abs(i - 1)], m[i], m[i + 1], m[i + 2], m[i + 3]], )
-                elif i == len(m) - 3:
-                    res = np.array([m[i - 3], m[i - 2], m[i - 1], m[i], m[i + 1], m[i + 2], m[i + 1]])
-                elif i == len(m) - 2:
-                    res = np.array([m[i - 3], m[i - 2], m[i - 1], m[i], m[i + 1], m[i], m[i - 1]])
-                elif i == len(m) - 1:
-                    res = np.array([m[i - 3], m[i - 2], m[i - 1], m[i], m[i - 1], m[i - 2], m[i - 3]])
+                    res = np.array([m[abs(k)] for k in range(-half, half + 1)])
+                elif i >= N - half:
+                    idx = [k if k < N else N - (k - N) - 2 for k in range(i-half, i+half+1)]
+                    res = [m[k] if k < N else m[N - (k - N) - 2] for k in range(i-half, i+half+1)]
                 else:
                     res = np.array(m[i - 3:i + 4])
                 X.append(np.concatenate(res))
