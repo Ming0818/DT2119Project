@@ -65,15 +65,15 @@ class Network:
             m = d[self.feature_name]
             N = len(m)
             for i, _ in enumerate(m):
-                if i < 3:
+                if i < half:
                     res = np.array([m[abs(k)] for k in range(-half, half + 1)])
                 elif i >= N - half:
-                    idx = [k if k < N else N - (k - N) - 2 for k in range(i-half, i+half+1)]
-                    res = [m[k] if k < N else m[N - (k - N) - 2] for k in range(i-half, i+half+1)]
+                    res = np.array([m[k] if k < N else m[N - (k - N) - 2] for k in range(i-half, i+half+1)])
                 else:
-                    res = np.array(m[i - 3:i + 4])
+                    res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
                 Y.append(self.phones.index(d['target'][i]))
+
         return np.array(X).astype('float32'), np_utils.to_categorical(Y)
 
     def speaker_normalisation(self, data):
