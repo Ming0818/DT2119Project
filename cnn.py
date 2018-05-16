@@ -12,7 +12,7 @@ class CNN(Network):
         lr_reduce = ReduceLROnPlateau(factor=0.2, verbose=1)
         model = Sequential()
 
-        model.add(Conv2D(32, kernel_size=(5, 5), strides=(1, 1),
+        model.add(Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
                          activation='relu',
                          input_shape=(self.x_val.shape[1:])))
         model.add(Flatten())
