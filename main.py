@@ -1,6 +1,7 @@
 from ffnn import FFNN
 from rnn import RNN
 from cnn import CNN
+from features_to_tsne import plot_features
 from metrics import get_f1_score, classification_report, get_accuracy
 
 
@@ -56,6 +57,7 @@ def test_cnn():
 if __name__ == "__main__":
     # test_ffnn()
     # test_rnn()
-    test_cnn()
+    plot_features()
+    # test_cnn()
 
 
