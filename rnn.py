@@ -1,7 +1,7 @@
 from network import Network
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras import Sequential
-from keras.layers import LSTM, Dense
+from keras.layers import LSTM, Dense, Bidirectional
 
 
 class RNN(Network):
@@ -10,13 +10,13 @@ class RNN(Network):
         lr_reduce = ReduceLROnPlateau(factor=0.2)
 
         model = Sequential()
-        model.add(LSTM(128, input_shape=(self.x_train.shape[1:]), return_sequences=True))
-        model.add(LSTM(128, return_sequences=True))
-        model.add(LSTM(64))
+        model.add(Bidirectional(LSTM(256, return_sequences=True), input_shape=(self.x_train.shape[1:])))
+        model.add(Bidirectional(LSTM(256, return_sequences=True)))
+        model.add(Bidirectional(LSTM(256)))
 
         model.add(Dense(self.y_train.shape[1], activation='softmax'))
 
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
         history_callback = model.fit(self.x_train, self.y_train,
                                      validation_data=(self.x_val, self.y_val),
