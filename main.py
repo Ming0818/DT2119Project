@@ -25,10 +25,10 @@ def test_ffnn():
 def test_rnn():
     """Notice as_mat is true here!"""
     params = {'n_layers': 2, 'hidden_nodes': [32, 32],
-              'epochs': 10, 'use_dynamic_features': True,
-              'use_mspec': False, 'as_mat': True,
+              'epochs': 100, 'use_dynamic_features': True,
+              'use_mspec': True, 'as_mat': True,
               'speaker_norm': False,
-              'context_length': 13}
+              'context_length': 35}
     net = RNN(params)
     model = net.train_model()
     net.set_model(model)
@@ -37,14 +37,15 @@ def test_rnn():
     print(get_f1_score(y_true, yp))
     print(get_accuracy(y_true, yp))
     print(classification_report(y_true, yp))
+    model.save('rnn-64-64-context-35.h5')
 
 
 def test_cnn():
     params = {'n_layers': 2, 'hidden_nodes': [32, 32],
-              'epochs': 10, 'use_dynamic_features': True,
+              'epochs': 100, 'use_dynamic_features': True,
               'use_mspec': True, 'as_mat': True,
               'speaker_norm': False,
-              'context_length': 17}
+              'context_length': 13}
     net = CNN(params)
     model = net.train_model()
     net.set_model(model)
@@ -53,6 +54,7 @@ def test_cnn():
     print(get_f1_score(y_true, yp))
     print(get_accuracy(y_true, yp))
     print(classification_report(y_true, yp))
+    model.save('cnn-32-32-128-dropout.h5')
 
 
 def test_cldnn():
@@ -73,8 +75,9 @@ def test_cldnn():
 
 if __name__ == "__main__":
     # test_ffnn()
-    # test_rnn()
+    test_rnn()
    # plot_features()
-    test_cnn()
+   # test_cnn()
+    #test_cldnn()
 
 

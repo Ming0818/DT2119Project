@@ -10,9 +10,8 @@ class RNN(Network):
         lr_reduce = ReduceLROnPlateau(factor=0.2, verbose=1)
 
         model = Sequential()
-        model.add(Bidirectional(LSTM(256, return_sequences=True), input_shape=(self.x_train.shape[1:])))
-        model.add(Bidirectional(LSTM(256, return_sequences=True)))
-        model.add(Bidirectional(LSTM(256)))
+        model.add(LSTM(64, return_sequences=True, input_shape=(self.x_train.shape[1:])))
+        model.add(LSTM(64))
 
         model.add(Dense(self.y_train.shape[1], activation='softmax'))
 
