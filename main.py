@@ -1,5 +1,6 @@
 from ffnn import FFNN
 from rnn import RNN
+from cnn import CNN
 from metrics import get_f1_score, classification_report, get_accuracy
 
 
@@ -36,8 +37,25 @@ def test_rnn():
     print(classification_report(y_true, yp))
 
 
+def test_cnn():
+    params = {'n_layers': 2, 'hidden_nodes': [32, 32],
+              'epochs': 10, 'use_dynamic_features': True,
+              'use_mspec': False, 'as_mat': True,
+              'speaker_norm': False,
+              'context_length': 17}
+    net = RNN(params)
+    model = net.train_model()
+    net.set_model(model)
+    y_true, yp = net.predict_on_test()
+    print("CNN RESULTS")
+    print(get_f1_score(y_true, yp))
+    print(get_accuracy(y_true, yp))
+    print(classification_report(y_true, yp))
+
+
 if __name__ == "__main__":
     # test_ffnn()
-    test_rnn()
+    # test_rnn()
+    test_cnn()
 
 
