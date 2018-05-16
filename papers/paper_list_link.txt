@@ -18,3 +18,6 @@ Deep Convolutional and LSTM Neural Networks for Acoustic Modelling in Automatic 
 
 LSTMCONV layers- keras: https://keras.io/layers/recurrent/#convlstm2d
 paper: https://arxiv.org/pdf/1506.04214v1.pdf
+
+
+CONVOLUTIONAL, LONG SHORT-TERM MEMORY, FULLY CONNECTED DEEP NEURAL NETWORKS - https://ieeexplore.ieee.org/abstract/document/7178838/
