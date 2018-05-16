@@ -7,7 +7,7 @@ from keras.layers import LSTM, Dense, Bidirectional
 class RNN(Network):
     def train_model(self):
         es = EarlyStopping(patience=4)
-        lr_reduce = ReduceLROnPlateau(factor=0.2)
+        lr_reduce = ReduceLROnPlateau(factor=0.2, verbose=1)
 
         model = Sequential()
         model.add(Bidirectional(LSTM(256, return_sequences=True), input_shape=(self.x_train.shape[1:])))
