@@ -1,7 +1,7 @@
 from network import Network
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras import Sequential
-from keras.layers import LSTM, Dense, Conv2D, MaxPooling2D
+from keras.layers import LSTM, Dense, Conv2D, MaxPooling2D, TimeDistributed
 import numpy as np
 
 
@@ -16,15 +16,15 @@ class CLDNN(Network):
 
         model = Sequential()
         # conv, conv, dense, lstm, lstm, dnn, dnn, out
-        model.add(Conv2D(256, kernel_size=(9, 9), strides=(1, 1),
+        model.add(TimeDistributed(Conv2D(256, kernel_size=(9, 9), strides=(1, 1),
                          activation='relu',
-                         input_shape=(self.x_val.shape[1:])))
+                         input_shape=(self.x_val.shape[1:]))))
 
-        model.add(Conv2D(256, kernel_size=(4, 3), strides=(1, 1), activation='relu'))
+        model.add(TimeDistributed(Conv2D(256, kernel_size=(4, 3), strides=(1, 1), activation='relu')))
 
-        model.add(MaxPooling2D())
+        model.add(TimeDistributed(MaxPooling2D()))
 
-        model.add(Dense(256))
+        model.add(TimeDistributed(Dense(256)))
 
         model.add(LSTM(512))
         model.add(LSTM(512))
