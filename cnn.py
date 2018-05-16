@@ -17,8 +17,6 @@ class CNN(Network):
         model.add(Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
                          activation='relu',
                          input_shape=(self.x_val.shape[1:])))
-        model.add(Dropout(0.3))
-        model.add(Conv2D(32, kernel_size=(3,3), strides=(1,1), activation='relu'))
         model.add(Flatten())
         model.add(Dense(128, activation='relu'))
         model.add(Dense(self.y_val.shape[1], activation='softmax'))
