@@ -1,6 +1,7 @@
 from ffnn import FFNN
 from rnn import RNN
 from cnn import CNN
+from cldnn import CLDNN
 from features_to_tsne import plot_features
 from metrics import get_f1_score, classification_report, get_accuracy
 
@@ -45,6 +46,22 @@ def test_cnn():
               'speaker_norm': False,
               'context_length': 17}
     net = CNN(params)
+    model = net.train_model()
+    net.set_model(model)
+    y_true, yp = net.predict_on_test()
+    print("CNN RESULTS")
+    print(get_f1_score(y_true, yp))
+    print(get_accuracy(y_true, yp))
+    print(classification_report(y_true, yp))
+
+
+def test_cldnn():
+    params = {'n_layers': 2, 'hidden_nodes': [32, 32],
+              'epochs': 10, 'use_dynamic_features': True,
+              'use_mspec': True, 'as_mat': True,
+              'speaker_norm': False,
+              'context_length': 7}
+    net = CLDNN(params)
     model = net.train_model()
     net.set_model(model)
     y_true, yp = net.predict_on_test()
