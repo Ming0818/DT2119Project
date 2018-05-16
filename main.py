@@ -43,7 +43,7 @@ def test_cnn():
               'use_mspec': False, 'as_mat': True,
               'speaker_norm': False,
               'context_length': 17}
-    net = RNN(params)
+    net = CNN(params)
     model = net.train_model()
     net.set_model(model)
     y_true, yp = net.predict_on_test()
