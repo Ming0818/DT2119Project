@@ -22,7 +22,7 @@ class Network:
         self.feature_name = 'mspec' if params['use_mspec'] else 'lmfcc'
         self.as_mat = params['as_mat']
         self.phones = self.import_phonemes()
-
+        self.phones_reduced = self.reduce_phones(self.phones)
         self.train, self.test, self.val = self.__load_data()
         if params['speaker_norm']:
             self.train = self.speaker_normalisation(self.train)
@@ -46,7 +46,17 @@ class Network:
 
     @staticmethod
     def import_phonemes():
-        return sorted([x.strip() for x in open('phonemeList.txt').readlines()])
+        return [x.strip() for x in open('phonemeList.txt').readlines()]
+    @staticmethod
+    def reduce_phones(phones):
+        mapping_dict = {'aa' : ['aa, ao'], 'ah' : ['ah', 'ax', 'ax-h'], 'er' : ['er', 'axr'], 'hh' : ['hh', 'hv'], 'ih' : ['ih', 'ix'], 'l' : ['l', 'el'], 'm' : ['m', 'em'], 'n' : ['n', 'en', 'nx'], 'ng' : ['ng', 'eng'], 'sh':  ['sh', 'zh'], 'uw': ['uw','ux'], 'sil' : ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+        for phone_index in range(len(phones)) :
+            for key, val in mapping_dict.items():
+                if phones[phone_index] in val :
+                    phones[phone_index] = key
+
+        return phones
+
 
     def __load_data(self) -> List[Dict]:
         if self.feature_name == 'mspec':
@@ -78,7 +88,7 @@ class Network:
                 else:
                     res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
-                Y.append(self.phones.index(d['target'][i]))
+                Y.append(self.phones_reduced.index(d['target'][i]))
 
         return np.array(X).astype('float32'), np_utils.to_categorical(Y)
 
