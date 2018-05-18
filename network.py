@@ -53,9 +53,10 @@ class Network:
         for phone_index in range(len(phones)) :
             for key, val in mapping_dict.items():
                 if phones[phone_index] in val :
-                    phones[phone_index] = key
+                    if phones[phone_index] != key :
+                        phones.remove(phones[phone_index])
         return phones
-        
+
     @staticmethod
     def phone_to_reduced_phone(target):
         mapping_dict = {'aa' : ['aa, ao'], 'ah' : ['ah', 'ax', 'ax-h'], 'er' : ['er', 'axr'], 'hh' : ['hh', 'hv'], 'ih' : ['ih', 'ix'], 'l' : ['l', 'el'], 'm' : ['m', 'em'], 'n' : ['n', 'en', 'nx'], 'ng' : ['ng', 'eng'], 'sh':  ['sh', 'zh'], 'uw': ['uw','ux'], 'sil' : ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
@@ -96,7 +97,7 @@ class Network:
                 else:
                     res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
-                Y.append(self.phones_reduced.index(phone_to_reduced_phone(d['target'][i])))
+                Y.append(self.phones_reduced.index(self.phone_to_reduced_phone(d['target'][i])))
 
         return np.array(X).astype('float32'), np_utils.to_categorical(Y)
 
