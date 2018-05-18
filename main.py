@@ -26,7 +26,7 @@ def store_results(y_true, yp, net, model_path, model):
         report = get_classification_report(y_true, yp, phones)
         f.write(str(report))
     cm = get_confusion_matrix(y_true, yp)
-    net.plot_confusion_matrix(cm, phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
+    net.plot_confusion_matrix(cm, phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'), normalize=True)
     model.save(os.path.join(os.getcwd(), model_path + os.sep + 'model.h5'))
 
 

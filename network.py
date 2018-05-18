@@ -47,32 +47,39 @@ class Network:
     @staticmethod
     def import_phonemes():
         return [x.strip() for x in open('phonemeList.txt').readlines()]
+
     @staticmethod
     def reduce_phones(phones):
-        mapping_dict = {'aa' : ['aa, ao'], 'ah' : ['ah', 'ax', 'ax-h'], 'er' : ['er', 'axr'], 'hh' : ['hh', 'hv'], 'ih' : ['ih', 'ix'], 'l' : ['l', 'el'], 'm' : ['m', 'em'], 'n' : ['n', 'en', 'nx'], 'ng' : ['ng', 'eng'], 'sh':  ['sh', 'zh'], 'uw': ['uw','ux'], 'sil' : ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
-        for phone_index in range(len(phones)) :
+        mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
+                        'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
+                        'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
+                        'sil': ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+
+        for phone_index in range(len(phones)):
             for key, val in mapping_dict.items():
-                if phones[phone_index] in val :
-                    if phones[phone_index] != key :
+                if phones[phone_index] in val:
+                    if phones[phone_index] != key:
                         phones.remove(phones[phone_index])
         return phones
 
     @staticmethod
     def phone_to_reduced_phone(target):
-        mapping_dict = {'aa' : ['aa, ao'], 'ah' : ['ah', 'ax', 'ax-h'], 'er' : ['er', 'axr'], 'hh' : ['hh', 'hv'], 'ih' : ['ih', 'ix'], 'l' : ['l', 'el'], 'm' : ['m', 'em'], 'n' : ['n', 'en', 'nx'], 'ng' : ['ng', 'eng'], 'sh':  ['sh', 'zh'], 'uw': ['uw','ux'], 'sil' : ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+        mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
+                        'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
+                        'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
+                        'sil': ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
         output_target = target
         for key, val in mapping_dict.items():
-            if target in val :
+            if target in val:
                 output_target = key
         return output_target
-
 
     def __load_data(self) -> List[Dict]:
         if self.feature_name == 'mspec':
             return [np.load('dataset/traindata_mspec.npz')['data'],
                     np.load('dataset/testdata_mspec.npz')['data'],
                     np.load('dataset/valdata_mspec.npz')['data']
-]
+                    ]
         return [np.load('dataset/traindata_.npz')['data'],
                 np.load('dataset/testdata_.npz')['data'],
                 np.load('dataset/valdata_.npz')['data']]
@@ -93,7 +100,7 @@ class Network:
                 if i < half:
                     res = np.array([m[abs(k)] for k in range(-half, half + 1)])
                 elif i >= N - half:
-                    res = np.array([m[k] if k < N else m[N - (k - N) - 2] for k in range(i-half, i+half+1)])
+                    res = np.array([m[k] if k < N else m[N - (k - N) - 2] for k in range(i - half, i + half + 1)])
                 else:
                     res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
@@ -151,11 +158,17 @@ class Network:
 
     def plot_confusion_matrix(self, cm, classes, path, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
         np.set_printoptions(suppress=True)  # removes scientific notation when saving to files
-        title = 'norm_confusion' if normalize else 'confusion'
+        plt.rcParams['mathtext.fontset'] = 'stix'
+        plt.rcParams['font.family'] = 'STIXGeneral'
+        plt.rcParams['savefig.dpi'] = 500
+        plt.style.use('ggplot')
+        plt.rcParams["errorbar.capsize"] = 3
+
+        title = 'Normalized Confusion Matrix' if normalize else 'confusion'
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         plt.clf()
-        #np.savetxt(self.params_to_folder() + os.sep + title + '.csv', cm, delimiter=",", fmt='%f')
+        # np.savetxt(self.params_to_folder() + os.sep + title + '.csv', cm, delimiter=",", fmt='%f')
         plt.imshow(cm, interpolation='nearest', cmap=cmap)
         plt.title(title)
         plt.colorbar()
