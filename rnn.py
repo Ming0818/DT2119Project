@@ -2,7 +2,7 @@ import os
 from network import Network
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras import Sequential
-from keras.layers import LSTM, Dense, Bidirectional
+from keras.layers import LSTM, Dense
 
 
 class RNN(Network):

@@ -3,7 +3,7 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras import Sequential
 import numpy as np
 import os
-from keras.layers import Conv2D, Dropout, Flatten, Dense
+from keras.layers import Conv2D, Flatten, Dense
 
 
 class CNN(Network):
