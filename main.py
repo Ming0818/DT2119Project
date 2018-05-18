@@ -10,15 +10,25 @@ from evaluate_model import Evaluate
 import os 
 
 
+def fixed_phones(net):
+    tmp = list(net.phones)
+    tmp.remove('2')
+    tmp.remove('1')
+    tmp.remove('dcl')
+    tmp.remove('q')
+    tmp.remove('tck')
+    return tmp
+
 def store_results(y_true, yp, net, model_path, model):
+    phones = fixed_phones(net)
     with open(os.path.join(os.getcwd(), model_path + os.sep + 'results.txt'), 'w') as f:
         f.write('acc: {}\n'.format(str(get_accuracy(y_true, yp))))
         f.write('edit: {}\n'.format(str(eval_edit_dist(y_true, yp, net.test, feature_name=net.feature_name))))
         f.write('f1-score: {}\n'.format(str(get_f1_score(y_true, yp))))
-        report = get_classification_report(y_true, yp, net.phones)
+        report = get_classification_report(y_true, yp, phones)
         f.write(str(report))
     cm = get_confusion_matrix(y_true, yp)
-    net.plot_confusion_matrix(cm, net.phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
+    net.plot_confusion_matrix(cm, phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
     model.save(os.path.join(os.getcwd(), model_path + os.sep + 'model.h5'))
 
 
@@ -76,19 +86,19 @@ def test_cldnn(params):
 
 
 if __name__ == "__main__":
-    # CNN setup
-    # ap = []
-    # ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
-    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13})
-    #
-    # for params in ap:
+#    CNN setup
+ #   ap = []
+  #  ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
+   #            'as_mat': True, 'speaker_norm': False, 'context_length': 13})
+    
+   #  for params in ap:
     #     test_cnn(params)
 
     # CLDN setup
     ap = []
-    ap.append({'lstm_hidden': [64, 64], 'dense_hidden': [128], 'conv_hidden': [64, 64], 'conv_kernels': [3, 3],
+    ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
                'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13})
+              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
 
     for params in ap:
         test_cldnn(params)
