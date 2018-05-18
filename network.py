@@ -121,9 +121,7 @@ class Network:
 
     def params_to_folder(self) -> str:
         folder_name = f"{str(self.n_layers)}_{'-'.join([str(i) for i in self.hidden_nodes])}" \
-                      f"_{self.feature_name}_" \
-                      f"{'dynamic_feats' if self.use_dynamic_features else 'regular_feats'}_" \
-                      f"epochs_{str(self.epochs)}"
+                      f"_{self.feature_name}_context_length_{self.context_length}_"
         if not os.path.exists(os.path.join(os.getcwd(), folder_name)):
             os.mkdir(folder_name)
         return folder_name
@@ -132,13 +130,13 @@ class Network:
         with open(self.params_to_folder() + os.sep + 'report.txt', 'w') as fh:
             model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-    def plot_confusion_matrix(self, cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    def plot_confusion_matrix(self, cm, classes, path, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
         np.set_printoptions(suppress=True)  # removes scientific notation when saving to files
         title = 'norm_confusion' if normalize else 'confusion'
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         plt.clf()
-        np.savetxt(self.params_to_folder() + os.sep + title + '.csv', cm, delimiter=",", fmt='%f')
+        #np.savetxt(self.params_to_folder() + os.sep + title + '.csv', cm, delimiter=",", fmt='%f')
         plt.imshow(cm, interpolation='nearest', cmap=cmap)
         plt.title(title)
         plt.colorbar()
@@ -148,7 +146,7 @@ class Network:
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.savefig(self.params_to_folder() + os.sep + title + '.png')
+        plt.savefig(path)
 
     def store_test_acc(self, acc, f1):
         with open(self.params_to_folder() + os.sep + 'test_acc.txt', 'w') as f:

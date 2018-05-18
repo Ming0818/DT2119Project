@@ -2,9 +2,22 @@ from ffnn import FFNN
 from rnn import RNN
 from cnn import CNN
 from cldnn import CLDNN
+from metrics import get_accuracy, f1_score, get_classification_report, get_confusion_matrix, eval_edit_dist
+from keras.models import load_model
 from features_to_tsne import plot_features
 from metrics import get_f1_score, classification_report, get_accuracy
+from evaluate_model import Evaluate
+import os 
 
+def store_results(y_true, yp, net, model_path, labels):
+    with open(os.path.join(os.getcwd(), model_path + os.sep + 'results.txt'), 'w') as f:
+        f.write('acc: {}\n'.format(str(get_accuracy(y_true, yp))))
+        f.write('edit: {}\n'.format(str(eval_edit_dist(y_true, yp, net.test, feature_name=net.feature_name))))
+        f.write('f1-score: {}\n'.format(str(get_f1_score(y_true, yp))))
+        report = get_classification_report(y_true, yp, net.phones)
+        f.write(str(report))
+    cm = get_confusion_matrix(y_true, yp)
+    net.plot_confusion_matrix(cm, net.phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
 
 def test_ffnn():
     params = {'n_layers': 4, 'hidden_nodes': [512, 512, 512, 512],
@@ -41,28 +54,23 @@ def test_rnn():
 
 
 def test_cnn():
-    params = {'n_layers': 2, 'hidden_nodes': [32, 32],
-              'epochs': 100, 'use_dynamic_features': True,
+    params = {'n_layers': 2, 'hidden_nodes': [64, 64],
+              'epochs': 1, 'use_dynamic_features': True,
               'use_mspec': True, 'as_mat': True,
               'speaker_norm': False,
               'context_length': 13}
     net = CNN(params)
-    model = net.train_model()
+    model, model_path = net.train_model(kernel_sizes=[(3, 3), (3, 3)])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
-    print("CNN RESULTS")
-    print(get_f1_score(y_true, yp))
-    print(get_accuracy(y_true, yp))
-    print(classification_report(y_true, yp))
-    model.save('cnn-32-32-128-dropout.h5')
-
+    store_results(y_true, yp, net, model_path, net.phones) 
 
 def test_cldnn():
     params = {'n_layers': 2, 'hidden_nodes': [32, 32],
-              'epochs': 10, 'use_dynamic_features': True,
+              'epochs': 1000, 'use_dynamic_features': True,
               'use_mspec': True, 'as_mat': True,
               'speaker_norm': False,
-              'context_length': 7}
+              'context_length': 13}
     net = CLDNN(params)
     model = net.train_model()
     net.set_model(model)
@@ -75,9 +83,14 @@ def test_cldnn():
 
 if __name__ == "__main__":
     # test_ffnn()
-    test_rnn()
-   # plot_features()
-   # test_cnn()
+    # test_rnn()
+    # plot_features()
+    test_cnn()
     #test_cldnn()
-
+    # params = {'n_layers': 2, 'hidden_nodes': [32, 32],
+    #   'epochs': 10, 'use_dynamic_features': True,
+    #   'use_mspec': True, 'as_mat': False,
+    #   'speaker_norm': False,
+    #   'context_length': 17}
+    #
 
