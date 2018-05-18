@@ -53,7 +53,7 @@ class Network:
         mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
                         'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
                         'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
-                        'sil': ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+                        'sil': ['pcl', 'tcl', 'kcl', 'tck', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
 
         for phone_index in range(len(phones)):
             for key, val in mapping_dict.items():
@@ -67,7 +67,7 @@ class Network:
         mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
                         'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
                         'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
-                        'sil': ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+                        'sil': ['pcl', 'tcl', 'kcl', 'tck', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
         output_target = target
         for key, val in mapping_dict.items():
             if target in val:
