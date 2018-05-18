@@ -2,6 +2,7 @@ from ffnn import FFNN
 from rnn import RNN
 from cnn import CNN
 from cldnn import CLDNN
+from metrics import get_accuracy, f1_score, get_classification_report, get_confusion_matrix, eval_edit_dist
 from keras.models import load_model
 from features_to_tsne import plot_features
 from metrics import get_f1_score, classification_report, get_accuracy
@@ -43,19 +44,25 @@ def test_rnn():
 
 def test_cnn():
     params = {'n_layers': 2, 'hidden_nodes': [64, 64],
-              'epochs': 1000, 'use_dynamic_features': True,
+              'epochs': 1, 'use_dynamic_features': True,
               'use_mspec': True, 'as_mat': True,
               'speaker_norm': False,
               'context_length': 17}
     net = CNN(params)
-    model = net.train_model(kernel_sizes=[(3, 3), (3, 3)])
+    model, model_path = net.train_model(kernel_sizes=[(3, 3), (3, 3)])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
-    print("CNN RESULTS")
-    print(get_f1_score(y_true, yp))
-    print(get_accuracy(y_true, yp))
-    print(classification_report(y_true, yp))
 
+    with open(os.path.join(os.getcwd(), model_path + os.sep + 'results.txt'), 'w') as f:
+        acc = get_accuracy(y_true, yp)
+        edit = eval_edit_dist(y_true, yp, net.test, feature_name=net.feature_name)
+        f1 = get_f1_score(y_true, yp)
+        report = get_classification_report(y_true, yp, net.phones)
+
+        f.writelines([acc, edit, f1, report])
+        # def plot_confusion_matrix(self, cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    cm = get_confusion_matrix(y_true, yp)
+    net.plot_confusion_matrix(cm, net.phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
 
 def test_cldnn():
     params = {'n_layers': 2, 'hidden_nodes': [32, 32],
@@ -87,12 +94,7 @@ if __name__ == "__main__":
     #   'speaker_norm': False,
     #   'context_length': 17}
     #
-    # model = Evaluate(os.path.join('models', 'cnn-32-32-128-dropout.h5'), params)
-    # print('accuracy :',model.get_accuracy())
-    # print('edit distance :', model.eval_edit_dist())
-    # print('f1_score :', model.get_f1_score())
-    # print('classification_report :', model.get_classification_report())
-    # model.get_confusion_matrix()
+
 
 
 

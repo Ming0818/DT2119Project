@@ -125,7 +125,7 @@ class Network:
         with open(self.params_to_folder() + os.sep + 'report.txt', 'w') as fh:
             model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-    def plot_confusion_matrix(self, cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    def plot_confusion_matrix(self, cm, classes, path, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
         np.set_printoptions(suppress=True)  # removes scientific notation when saving to files
         title = 'norm_confusion' if normalize else 'confusion'
         if normalize:
@@ -141,7 +141,7 @@ class Network:
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.savefig(self.params_to_folder() + os.sep + title + '.png')
+        plt.savefig(path)
 
     def store_test_acc(self, acc, f1):
         with open(self.params_to_folder() + os.sep + 'test_acc.txt', 'w') as f:
