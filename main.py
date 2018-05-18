@@ -9,7 +9,8 @@ from metrics import get_f1_score, classification_report, get_accuracy
 from evaluate_model import Evaluate
 import os 
 
-def store_results(y_true, yp, net, model_path, labels):
+
+def store_results(y_true, yp, net, model_path, model):
     with open(os.path.join(os.getcwd(), model_path + os.sep + 'results.txt'), 'w') as f:
         f.write('acc: {}\n'.format(str(get_accuracy(y_true, yp))))
         f.write('edit: {}\n'.format(str(eval_edit_dist(y_true, yp, net.test, feature_name=net.feature_name))))
@@ -18,6 +19,8 @@ def store_results(y_true, yp, net, model_path, labels):
         f.write(str(report))
     cm = get_confusion_matrix(y_true, yp)
     net.plot_confusion_matrix(cm, net.phones, os.path.join(os.getcwd(), model_path + os.sep + 'confusion_matrix.png'))
+    model.save(os.path.join(os.getcwd(), model_path + os.sep + 'model.h5'))
+
 
 def test_ffnn():
     params = {'n_layers': 4, 'hidden_nodes': [512, 512, 512, 512],
@@ -63,7 +66,8 @@ def test_cnn():
     model, model_path = net.train_model(kernel_sizes=[(3, 3), (3, 3)])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
-    store_results(y_true, yp, net, model_path, net.phones) 
+    store_results(y_true, yp, net, model_path, model)
+
 
 def test_cldnn():
     params = {'n_layers': 2, 'hidden_nodes': [32, 32],
