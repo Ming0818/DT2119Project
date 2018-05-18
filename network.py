@@ -39,9 +39,9 @@ class Network:
         self.x_val = self.scaler.transform(self.x_val)
         if self.as_mat:
             """ 13 is number of MFCC features. Don't love the magic number."""
-            self.x_train = self.x_train.reshape((self.x_train.shape[0], self.context_length, 13))
-            self.x_test = self.x_test.reshape((self.x_test.shape[0], self.context_length, 13))
-            self.x_val = self.x_val.reshape((self.x_val.shape[0], self.context_length, 13))
+            self.x_train = self.x_train.reshape((self.x_train.shape[0], self.context_length, 40))
+            self.x_test = self.x_test.reshape((self.x_test.shape[0], self.context_length, 40))
+            self.x_val = self.x_val.reshape((self.x_val.shape[0], self.context_length, 40))
 
     @staticmethod
     def import_phonemes():
@@ -49,9 +49,9 @@ class Network:
 
     @staticmethod
     def __load_data() -> List[Dict]:
-        return [np.load('dataset/traindata_.npz')['data'],
-                np.load('dataset/testdata_.npz')['data'],
-                np.load('dataset/valdata_.npz')['data']]
+        return [np.load('dataset/traindata_mspec.npz')['data'],
+                np.load('dataset/testdata_mspec.npz')['data'],
+                np.load('dataset/valdata_mspec.npz')['data']]
 
     def __regular_features(self, data):
         x = np.concatenate([x[self.feature_name] for x in data])
