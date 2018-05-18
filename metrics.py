@@ -44,7 +44,7 @@ def levenshtein(source, target):
     return previous_row[-1]
 
 
-def eval_edit_dist(y_true, yp, test_data):
+def eval_edit_dist(y_true, yp, test_data, feature_name = 'lmfcc'):
 
     def merge_identical(array):
         tmp_array = np.array([array[0]])
@@ -56,10 +56,7 @@ def eval_edit_dist(y_true, yp, test_data):
     curr_index = 0
     errors = 0
     for utterance in test_data:
-        len_utter = utterance['lmfcc'].shape[0]
-        if len_utter == 13:
-            return 'Wrong dimension'
-
+        len_utter = utterance[feature_name].shape[0]
         merge_state = merge_identical(yp[curr_index:curr_index + len_utter])
         test_merge_state = merge_identical(y_true[curr_index:curr_index + len_utter])
         curr_index += len_utter
