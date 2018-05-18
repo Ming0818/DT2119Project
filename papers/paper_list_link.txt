@@ -21,3 +21,6 @@ paper: https://arxiv.org/pdf/1506.04214v1.pdf
 
 
 CONVOLUTIONAL, LONG SHORT-TERM MEMORY, FULLY CONNECTED DEEP NEURAL NETWORKS - https://ieeexplore.ieee.org/abstract/document/7178838/
+
+
+Original LSTM paper : http://www.bioinf.jku.at/publications/older/2604.pdf
