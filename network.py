@@ -116,9 +116,7 @@ class Network:
 
     def params_to_folder(self) -> str:
         folder_name = f"{str(self.n_layers)}_{'-'.join([str(i) for i in self.hidden_nodes])}" \
-                      f"_{self.feature_name}_" \
-                      f"{'dynamic_feats' if self.use_dynamic_features else 'regular_feats'}_" \
-                      f"epochs_{str(self.epochs)}"
+                      f"_{self.feature_name}_context_length_{self.context_length}_"
         if not os.path.exists(os.path.join(os.getcwd(), folder_name)):
             os.mkdir(folder_name)
         return folder_name
