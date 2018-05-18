@@ -11,7 +11,7 @@ import os
 
 
 def fixed_phones(net):
-    tmp = list(net.phones)
+    tmp = list(net.phones_reduced)
     tmp.remove('2')
     tmp.remove('1')
     tmp.remove('dcl')
