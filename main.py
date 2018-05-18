@@ -65,29 +65,33 @@ def test_cnn(params):
     store_results(y_true, yp, net, model_path, model)
 
 
-def test_cldnn():
-    params = {'n_layers': 2, 'hidden_nodes': [32, 32],
-              'epochs': 1000, 'use_dynamic_features': True,
-              'use_mspec': True, 'as_mat': True,
-              'speaker_norm': False,
-              'context_length': 13}
+def test_cldnn(params):
     net = CLDNN(params)
-    model = net.train_model()
+    model, model_path = net.train_model(params['conv_hidden'], params['lstm_hidden'],
+                            params['conv_kernels'], params['dense_hidden'])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
-    print("CNN RESULTS")
-    print(get_f1_score(y_true, yp))
-    print(get_accuracy(y_true, yp))
-    print(classification_report(y_true, yp))
+    store_results(y_true, yp, net, model_path, model)
+
 
 
 if __name__ == "__main__":
+    # CNN setup
+    # ap = []
+    # ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13})
+    #
+    # for params in ap:
+    #     test_cnn(params)
+
+    # CLDN setup
     ap = []
-    ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
+    ap.append({'lstm_hidden': [64, 64], 'dense_hidden': [128], 'conv_hidden': [64, 64], 'conv_kernels': [3, 3],
+               'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
               'as_mat': True, 'speaker_norm': False, 'context_length': 13})
 
     for params in ap:
-        test_cnn(params)
+        test_cldnn(params)
 
     #
 
