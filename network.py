@@ -54,8 +54,16 @@ class Network:
             for key, val in mapping_dict.items():
                 if phones[phone_index] in val :
                     phones[phone_index] = key
-
         return phones
+        
+    @staticmethod
+    def phone_to_reduced_phone(target):
+        mapping_dict = {'aa' : ['aa, ao'], 'ah' : ['ah', 'ax', 'ax-h'], 'er' : ['er', 'axr'], 'hh' : ['hh', 'hv'], 'ih' : ['ih', 'ix'], 'l' : ['l', 'el'], 'm' : ['m', 'em'], 'n' : ['n', 'en', 'nx'], 'ng' : ['ng', 'eng'], 'sh':  ['sh', 'zh'], 'uw': ['uw','ux'], 'sil' : ['pcl', 'tcl', 'kcl', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
+        output_target = target
+        for key, val in mapping_dict.items():
+            if target in val :
+                output_target = key
+        return output_target
 
 
     def __load_data(self) -> List[Dict]:
@@ -88,7 +96,7 @@ class Network:
                 else:
                     res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
-                Y.append(self.phones_reduced.index(d['target'][i]))
+                Y.append(self.phones_reduced.index(phone_to_reduced_phone(d['target'][i])))
 
         return np.array(X).astype('float32'), np_utils.to_categorical(Y)
 

@@ -14,9 +14,7 @@ def fixed_phones(net):
     tmp = list(net.phones_reduced)
     tmp.remove('2')
     tmp.remove('1')
-    tmp.remove('dcl')
     tmp.remove('q')
-    tmp.remove('tck')
     return tmp
 
 def store_results(y_true, yp, net, model_path, model):
