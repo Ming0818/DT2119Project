@@ -17,6 +17,7 @@ def fixed_phones(net):
     tmp.remove('q')
     return tmp
 
+
 def store_results(y_true, yp, net, model_path, model):
     phones = fixed_phones(net)
     with open(os.path.join(os.getcwd(), model_path + os.sep + 'results.txt'), 'w') as f:
@@ -65,9 +66,8 @@ def test_rnn():
 
 
 def test_cnn(params):
-
     net = CNN(params)
-    model, model_path = net.train_model(kernel_sizes=[(3, 3), (3, 3)])
+    model, model_path = net.train_model(kernel_sizes=params['kernel_sizes'], strides=params['strides'])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
     store_results(y_true, yp, net, model_path, model)
@@ -84,22 +84,36 @@ def test_cldnn(params):
 
 
 if __name__ == "__main__":
-#    CNN setup
- #   ap = []
-  #  ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
-   #            'as_mat': True, 'speaker_norm': False, 'context_length': 13})
+    #    CNN setup
+    ap = []
+    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
+               'strides': [(1, 1), (1, 1)]})
+
+    ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
+               'strides': [(1, 1), (1, 1)]})
+
+    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
+               'strides': [(1, 1), (1, 1)]})
+
+    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
+               'strides': [(2, 2), (2, 2)]})
     
-   #  for params in ap:
-    #     test_cnn(params)
+    for i, params in enumerate(ap):
+        print("training model: {}".format(i))
+        test_cnn(params)
 
     # CLDN setup
-    ap = []
-    ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
-               'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
-
-    for params in ap:
-        test_cldnn(params)
+    # ap = []
+    # ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
+    #            'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
+    #
+    # for params in ap:
+    #     test_cldnn(params)
 
     #
 
