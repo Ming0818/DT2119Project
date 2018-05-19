@@ -55,7 +55,7 @@ def test_rnn():
               'speaker_norm': False,
               'context_length': 35}
     net = RNN(params)
-    model = net.train_model()
+    model = net.train_model(params['unroll'])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
     print("RNN RESULTS")
@@ -85,26 +85,44 @@ def test_cldnn(params):
 
 if __name__ == "__main__":
     #    CNN setup
+    # ap = []
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
+    #            'strides': [(1, 1), (1, 1)]})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
+    #            'strides': [(1, 1), (1, 1)]})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
+    #            'strides': [(1, 1), (1, 1)]})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
+    #            'strides': [(2, 2), (2, 2)]})
+    #
+    # for i, params in enumerate(ap):
+    #     print("training model: {}".format(i))
+    #     test_cnn(params)
+    # LSTM settings
+
     ap = []
     ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
-               'strides': [(1, 1), (1, 1)]})
-
-    ap.append({'n_layers': 2, 'hidden_nodes': [64, 64], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'kernel_sizes': [(3, 3), (3, 3)],
-               'strides': [(1, 1), (1, 1)]})
+               'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': False})
 
     ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
-               'strides': [(1, 1), (1, 1)]})
+               'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': False})
 
     ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'kernel_sizes': [(3, 3), (3, 3)],
-               'strides': [(2, 2), (2, 2)]})
-    
+               'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': True})
+
+    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+               'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': True})
+
     for i, params in enumerate(ap):
         print("training model: {}".format(i))
-        test_cnn(params)
+        test_rnn(params)
 
     # CLDN setup
     # ap = []
