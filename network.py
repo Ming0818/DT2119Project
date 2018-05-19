@@ -54,13 +54,14 @@ class Network:
                         'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
                         'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
                         'sil': ['pcl', 'tcl', 'kcl', 'tck', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
-
+        tmp_phones = list(phones)
+        tmp_phones.append('sil')
         for phone_index in range(len(phones)):
             for key, val in mapping_dict.items():
                 if phones[phone_index] in val:
                     if phones[phone_index] != key:
-                        phones.remove(phones[phone_index])
-        return phones
+                        tmp_phones.remove(phones[phone_index])
+        return tmp_phones
 
     @staticmethod
     def phone_to_reduced_phone(target):
@@ -167,6 +168,7 @@ class Network:
         title = 'Normalized Confusion Matrix' if normalize else 'confusion'
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        plt.figure(figsize=(9,9))
         plt.clf()
         # np.savetxt(self.params_to_folder() + os.sep + title + '.csv', cm, delimiter=",", fmt='%f')
         plt.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -175,7 +177,7 @@ class Network:
         tick_marks = np.arange(len(classes))
         plt.xticks(tick_marks, classes, rotation=45)
         plt.yticks(tick_marks, classes)
-        plt.tight_layout()
+       # plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.savefig(path)
