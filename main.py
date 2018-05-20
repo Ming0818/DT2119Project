@@ -12,9 +12,9 @@ import os
 
 def fixed_phones(net):
     tmp = list(net.phones_reduced)
-    tmp.remove('2')
-    tmp.remove('1')
-    tmp.remove('q')
+#    tmp.remove('2')
+#    tmp.remove('1')
+#    tmp.remove('q')
     return tmp
 
 
@@ -127,12 +127,12 @@ if __name__ == "__main__":
     #  CLDN setup
     ap = []
     ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
-               'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': False,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
+               'epochs': 200, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'n_layers': None, 'hidden_nodes': None})
 
     ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
-               'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': True,
-              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
+               'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': False,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'n_layers': None, 'hidden_nodes': None})
 
     # ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [9, 4],
     #            'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True,
