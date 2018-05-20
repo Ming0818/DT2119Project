@@ -22,6 +22,9 @@ class Network:
         self.feature_name = 'mspec' if params['use_mspec'] else 'lmfcc'
         self.as_mat = params['as_mat']
         self.phones = self.import_phonemes()
+        self.phones.remove('2')
+        self.phones.remove('1')
+        self.phones.remove('q')
         self.phones_reduced = self.reduce_phones(self.phones)
         self.train, self.test, self.val = self.__load_data()
         if params['speaker_norm']:
@@ -31,6 +34,7 @@ class Network:
         self.use_dynamic_features = params['use_dynamic_features']
         self.feature_func = self.__dynamic_features if self.use_dynamic_features else self.__regular_features
         self.x_train, self.y_train = self.feature_func(self.train)
+        print(self.y_train.shape)
         self.x_test, self.y_test = self.feature_func(self.test)
         self.x_val, self.y_val = self.feature_func(self.val)
         self.scaler = StandardScaler()
@@ -50,7 +54,7 @@ class Network:
 
     @staticmethod
     def reduce_phones(phones):
-        mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
+        mapping_dict = {'aa': ['aa', 'ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
                         'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
                         'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
                         'sil': ['pcl', 'tcl', 'kcl', 'tck', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
@@ -65,7 +69,7 @@ class Network:
 
     @staticmethod
     def phone_to_reduced_phone(target):
-        mapping_dict = {'aa': ['aa, ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
+        mapping_dict = {'aa': ['aa', 'ao'], 'ah': ['ah', 'ax', 'ax-h'], 'er': ['er', 'axr'], 'hh': ['hh', 'hv'],
                         'ih': ['ih', 'ix'], 'l': ['l', 'el'], 'm': ['m', 'em'], 'n': ['n', 'en', 'nx'],
                         'ng': ['ng', 'eng'], 'sh': ['sh', 'zh'], 'uw': ['uw', 'ux'],
                         'sil': ['pcl', 'tcl', 'kcl', 'tck', 'bcl', 'dcl', 'gcl', 'h#', 'pau', 'epi']}
@@ -106,7 +110,6 @@ class Network:
                     res = np.array(m[i - half:i + half + 1])
                 X.append(np.concatenate(res))
                 Y.append(self.phones_reduced.index(self.phone_to_reduced_phone(d['target'][i])))
-
         return np.array(X).astype('float32'), np_utils.to_categorical(Y)
 
     def speaker_normalisation(self, data):
