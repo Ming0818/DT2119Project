@@ -76,7 +76,7 @@ def test_cnn(params):
 def test_cldnn(params):
     net = CLDNN(params)
     model, model_path = net.train_model(params['conv_hidden'], params['lstm_hidden'],
-                            params['conv_kernels'], params['dense_hidden'])
+                            params['conv_kernels'], params['dense_hidden'], params['bidirectional'])
     net.set_model(model)
     y_true, yp = net.predict_on_test()
     store_results(y_true, yp, net, model_path, model)
@@ -105,33 +105,45 @@ if __name__ == "__main__":
     # for i, params in enumerate(ap):
     #     print("training model: {}".format(i))
     #     test_cnn(params)
+
     # LSTM settings
-
-    ap = []
-    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-               'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': False})
-
-    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-               'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': False})
-
-    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-               'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': True})
-
-    ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
-               'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': True})
-
-    for i, params in enumerate(ap):
-        print("training model: {}".format(i))
-        test_rnn(params)
-
-    # CLDN setup
     # ap = []
-    # ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
-    #            'epochs': 1, 'use_dynamic_features': True, 'use_mspec': True,
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #            'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': False})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #            'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': False})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #            'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'unroll': True})
+    #
+    # ap.append({'n_layers': 2, 'hidden_nodes': [32, 32], 'epochs': 1000, 'use_dynamic_features': True, 'use_mspec': True,
+    #            'as_mat': True, 'speaker_norm': False, 'context_length': 31, 'unroll': True})
+    #
+    # for i, params in enumerate(ap):
+    #     print("training model: {}".format(i))
+    #     test_rnn(params)
+
+    #  CLDN setup
+    ap = []
+    ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
+               'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': False,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
+
+    ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [3, 3],
+               'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True, 'bidirectional': True,
+              'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
+
+    # ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [9, 4],
+    #            'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True,
     #           'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
     #
-    # for params in ap:
-    #     test_cldnn(params)
+    # ap.append({'lstm_hidden': [32, 32], 'dense_hidden': [32, 32], 'conv_hidden': [32, 32], 'conv_kernels': [9, 9],
+    #            'epochs': 150, 'use_dynamic_features': True, 'use_mspec': True,
+    #           'as_mat': True, 'speaker_norm': False, 'context_length': 13, 'n_layers': None, 'hidden_nodes': None})
 
-    #
+    for params in ap:
+        test_cldnn(params)
+
+
 
