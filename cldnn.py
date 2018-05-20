@@ -47,13 +47,13 @@ class CLDNN(Network):
                   validation_data=(self.x_val, self.y_val),
                   epochs=self.epochs,
                   batch_size=2048, callbacks=[es, lr_reduce])
-        return model, self.cnn_params_to_folder(conv_sizes, lstm_sizes, conv_kernels, dense_sizes)
+        return model, self.cnn_params_to_folder(conv_sizes, lstm_sizes, conv_kernels, dense_sizes, bidirectional)
 
-    def cnn_params_to_folder(self, conv_sizes, lstm_sizes, kernels, dense_sizes) -> str:
+    def cnn_params_to_folder(self, conv_sizes, lstm_sizes, kernels, dense_sizes, bidirectional) -> str:
         folder_name = f"CLDNN__conv_{'-'.join([str(i) for i in conv_sizes])}_" \
                       f"lstm_{'-'.join([str(i) for i in lstm_sizes])}_" \
                       f"dense_{'-'.join([str(i)for i in dense_sizes])}_" \
-                      f"kernels_{'-'.join([str(i) for i in kernels])}" \
+                      f"kernels_{'-'.join([str(i) for i in kernels])}_bidirect_{bidirectional}" \
                       f"_{self.feature_name}_context_length_{self.context_length}"
 
         if not os.path.exists(os.path.join(os.getcwd(), folder_name)):
