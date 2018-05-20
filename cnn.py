@@ -18,7 +18,6 @@ class CNN(Network):
         model.add(Conv2D(self.hidden_nodes[0], kernel_size=kernel_sizes[0], strides=strides[0],
                          activation='relu', padding='same',
                          input_shape=(self.x_val.shape[1:])))
-        model.add(MaxPooling2D())
         for i in range(1, len(self.hidden_nodes)):
             model.add(Conv2D(self.hidden_nodes[i], padding='same', kernel_size=kernel_sizes[i], strides=strides[i]))
 
