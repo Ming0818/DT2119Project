@@ -1,5 +1,8 @@
 # DT2119Project
+Final project for the course Speech and Speaker Recognition at KTH 2018.
 
-## Copying data from csc.kth
-scp -r [kthusername]@u-shell.csc.kth.se:/afs/kth.se/misc/csc/dept/tmh/corpora/timit/timit/timit/train /Users/eysteinngunnlaugsson/School/speech
-scp -r [kthsuername]@u-shell.csc.kth.se:/afs/kth.se/misc/csc/dept/tmh/corpora/timit/timit/timit/test /Users/eysteinngunnlaugsson/School/speech
+In this project we evaluated the effect of combining Dense, Convolutional and Recurrent layers in a single network for Phoneme classification.
+
+We developed a network very similar to the one described in this [paper](https://static.googleusercontent.com/media/research.google.com/fr//pubs/archive/43455.pdf).
+
+Our paper can be found [here](https://github.com/eysteinn13/DT2119Project/blob/master/report.pdf).
